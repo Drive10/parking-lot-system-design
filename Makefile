@@ -1,4 +1,4 @@
-.PHONY: build test clean run dev docker-up docker-down lint
+.PHONY: build test clean run dev docker-up docker-down frontend-install frontend-dev frontend-build frontend-test
 
 build:
 	mvn clean package -DskipTests
@@ -16,17 +16,22 @@ run:
 dev:
 	mvn spring-boot:run -Dspring-boot.run.profiles=dev
 
+frontend-install:
+	cd frontend && npm install
+
+frontend-dev:
+	cd frontend && npm run dev
+
+frontend-build:
+	cd frontend && npm run build
+
+frontend-test:
+	cd frontend && npm test
+
 docker-up:
 	docker compose up --build -d
 
 docker-down:
 	docker compose down
 
-lint:
-	mvn checkstyle:check
-
-coverage:
-	mvn verify
-	open target/site/jacoco/index.html 2>/dev/null || true
-
-all: clean build test
+all: build test
